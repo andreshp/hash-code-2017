@@ -118,7 +118,7 @@ class Solution(AbstractSolution):
 
 
     def writeSolution(self, fname):
-        if not validSolution():
+        if not self.validSolution():
             print("The obtained solution is not valid...")
 
         print("The solution has objective value", scoreSolution())    
