@@ -119,6 +119,10 @@ class Solution(AbstractSolution):
 
 
     def writeSolution(self, fname):
+        if not validSolution():
+            print("The obtained solution is not valid...")
+
+        print("The solution has objective value", scoreSolution())    
         f = open(fname, 'w')
         f.write(str(sum(1 for v in self.solution if v))+'\n')
         for i,v in enumerate(self.solution):
