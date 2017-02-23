@@ -66,7 +66,9 @@ class AbstractSolution:
     def solveProblem(self, fname):
         """ Solve the problem for a .in file. """
         self.readInput(fname)
+        t0 = time()
         self.findSolution()
+        t1 = time()
         self.saveSolution()
 
     #### LLAMAR A ESTA PARA RESOLVER TODOS LOS FICHEROS .in
