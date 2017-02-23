@@ -142,7 +142,7 @@ class Solution(AbstractSolution):
         for v,e,n in sorted(self.re, key=lambda x: x[2], reverse=True):
             cache = -1
             for c,l in self.ep[e].sc:
-                if self.v_size[v] < self.space[c]:
+                if self.v_size[v] <= self.space[c]:
                     cache = c
                     break
             if cache != -1:
@@ -182,17 +182,19 @@ class Solution(AbstractSolution):
         if not self.validSolution():
             return -1
         saved = 0
+        reqs = 0
         for v,e,n in self.re:
+            reqs += n
             ld = lat = self.ep[e].L
             conn = self.ep[e].c
             for c in conn:
                 if conn[c] < lat and v in self.solution[c]:
                     lat = conn[c]
             saved += n*(self.ep[e].L - lat)
-        return saved
+        return int(saved*1000/reqs)
 
 if __name__ == "__main__":
     sol = Solution()
     sol.solveAll()
-    #sol.solveProblem('me_at_the_zoo.in')
+    #sol.solveProblem('trending_today.in')
 
