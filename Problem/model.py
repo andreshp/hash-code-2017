@@ -82,10 +82,11 @@ class AbstractSolution:
                     pass
 
 class EndPoint:
-    def __init__(self, L, K, connections):
+    def __init__(self, L, K, connections, sorted):
         self.L = L
         self.K = K
         self.c = connections
+        self.sc = sorted_connections
 
 
 class Solution(AbstractSolution):
@@ -101,15 +102,20 @@ class Solution(AbstractSolution):
         for i in range(0, self.E):
             L, K = map(int, f.readline().split())
             connections = {}
+            sorted_connections = []
             for j in range(0, K):
                 c, Lc = map(int, f.readline().split())
                 connections[c] = Lc
-            self.ep.append(EndPoint(L, K, connections))
+                sorted_connections.append((c,Lc))
+            sort(sorted_connections, lambda x: x[1])
+            self.ep.append(EndPoint(L, K, connections, sorted_connections))
+            
 
         self.re = []
         for i in range(0, self.R):
             Rv, Re, Rn = map(int, f.readline().split())
             self.re.append((Rv, Re, Rn))
+            
 
     def writeSolution(self, fname):
         f = open(fname, 'w')
