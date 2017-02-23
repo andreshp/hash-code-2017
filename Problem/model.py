@@ -81,11 +81,36 @@ class AbstractSolution:
                     # Allow cut off with ^C
                     pass
 
+class EndPoint:
+    def __init__(self, L, K, connections):
+        self.L = L
+        self.K = K
+        self.c = connections
+        
+                
 class Solution(AbstractSolution):
     #### IMPLEMENTAR FUNCIONES NECESARIAS AQUI
 
-    # def parseFile(self, fname):
+    def parseFile(self, fname):
+        f = open(fname)
+        self.V, self.E, self.R, self.C, self.X = map(int, f.readline().split())
+        self.v_size = list(map(int, f.readline().split()))
+        self.endpoints = []
 
+        # Read the endpoints
+        for i in range(0, self.E):
+            L, K = map(int, f.readline().split())
+            connections = {}
+            for j in range(0, K):
+                c, Lc = map(int, f.readline().split())
+                connections[c] = Lc
+            self.endpoints.append(EndPoint(L, K, connections))
+
+        self.re = []
+        for i in range(0, R):
+            Rv, Re, Rn = map(int, f.readline().split())
+            re.append((Rv, Re, Rn))
+            
     # def writeSolution(self, fname):
 
     # def initialSolution(self):
