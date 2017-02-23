@@ -19,7 +19,7 @@ class AbstractSolution:
         """
         if score is None:
             score = self.scoreSolution()
-        output = self.fname+'_'+str(score)+'.out'
+        output = os.path.join('solutions',self.fname+'_'+str(score)+'.out')
         self.writeSolution(output)
 
     def writeSolution(self, fname):
