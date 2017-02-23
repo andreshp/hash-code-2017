@@ -156,9 +156,12 @@ class Solution(AbstractSolution):
                        self.cache_used[pair[0]] += self.v_size[r[0]]
                        videos.add(r[0])
                        break
-        
+                   
     # def iterateSolution(self):
 
+    def improve(self):
+        for 
+    
     def stopSolution(self):
         return True
 
