@@ -72,7 +72,8 @@ class AbstractSolution:
     #### LLAMAR A ESTA PARA RESOLVER TODOS LOS FICHEROS .in
     def solveAll(self):
         """ Solve every .in file in the directory. """
-        for f in os.listdir():
+        for f in sorted(os.listdir(),
+                        key=lambda x:os.path.getsize(x)):
             if f.endswith('.in'):
                 try:
                     print('solving',f)
@@ -82,7 +83,7 @@ class AbstractSolution:
                     pass
 
 class EndPoint:
-    def __init__(self, L, K, connections, sorted):
+    def __init__(self, L, K, connections, sorted_connections):
         self.L = L
         self.K = K
         self.c = connections
@@ -107,15 +108,15 @@ class Solution(AbstractSolution):
                 c, Lc = map(int, f.readline().split())
                 connections[c] = Lc
                 sorted_connections.append((c,Lc))
-            sort(sorted_connections, lambda x: x[1])
+            sorted_connections.sort(key=lambda x: x[1])
             self.ep.append(EndPoint(L, K, connections, sorted_connections))
-            
+
 
         self.re = []
         for i in range(0, self.R):
             Rv, Re, Rn = map(int, f.readline().split())
             self.re.append((Rv, Re, Rn))
-            
+
 
     def writeSolution(self, fname):
         f = open(fname, 'w')
@@ -138,11 +139,19 @@ class Solution(AbstractSolution):
 
     # def iterateSolution(self):
 
-    # def stopSolution(self):
+    def stopSolution(self):
+        return True
 
-    # def scoreSolution(self):
-
-    pass
+    def scoreSolution(self):
+        saved = 0
+        for v,e,n in self.re:
+            ld = lat = self.ep[e].L
+            conn = self.ep[e].c
+            for c in conn:
+                if conn[c] < lat and v in self.solution[c]:
+                    lat = conn[c]
+            saved += n*(self.ep[e].L - lat)
+        return saved
 
 if __name__ == "__main__":
     sol = Solution()
