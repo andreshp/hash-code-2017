@@ -1,5 +1,6 @@
 import time
 import os
+import random
 
 #### NOTA: ASEGURARSE DE QUE EXISTA EL DIRECTORIO solutions
 class AbstractSolution:
@@ -41,7 +42,7 @@ class AbstractSolution:
         or can be implemented for the particular problem.
         """
         self.initialSolution()
-        self.saveSolution(0)
+        self.saveSolution()
         self.max_score = max(0,self.scoreSolution())
         while not self.stopSolution():
             self.iterateSolution()
@@ -137,21 +138,45 @@ class Solution(AbstractSolution):
         for _ in range(self.C):
             self.solution.append(set())
 
-        space = [self.X]*self.C
+        self.space = [self.X]*self.C
         for v,e,n in sorted(self.re, key=lambda x: x[2], reverse=True):
             cache = -1
             for c,l in self.ep[e].sc:
-                if self.v_size[v] < space[c]:
+                if self.v_size[v] < self.space[c]:
                     cache = c
                     break
             if cache != -1:
-                self.solution[cache].add(v)
-                space[cache] -= self.v_size[v]
+                self.addVideo(cache, v)
 
-    # def iterateSolution(self):
+    def addVideo(self, c, v):
+        if v not in self.solution[c]:
+            self.solution[c].add(v)
+            self.space[c] -= self.v_size[v]
+
+    def removeVideo(self, c,v):
+        if v in self.solution[c]:
+            self.solution[c].remove(v)
+            self.space[c] += self.v_size[v]
+
+    def iterateSolution(self):
+        v,e,n = random.choice(self.re)
+        if not self.ep[e].c:
+            return
+        c = random.choice(list(self.ep[e].c.keys()))
+        s = self.v_size[v]
+        if s > self.X:
+            return
+        while self.space[c] < s:
+            r = random.choice(list(self.solution[c]))
+            self.removeVideo(c, r)
+        self.addVideo(c, v)
 
     def stopSolution(self):
-        return True
+        try:
+            self.iters += 1
+        except AttributeError:
+            self.iters = 1
+        return self.iters**5 > self.V*self.E*self.R*self.C*self.X*1
 
     def scoreSolution(self):
         if not self.validSolution():
