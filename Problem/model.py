@@ -42,7 +42,7 @@ class AbstractSolution:
         """
         self.initialSolution()
         self.saveSolution(0)
-        self.max_score = max(self.max_score,self.scoreSolution())
+        self.max_score = max(0,self.scoreSolution())
         while not self.stopSolution():
             self.iterateSolution()
             score = self.scoreSolution()
@@ -86,8 +86,8 @@ class EndPoint:
         self.L = L
         self.K = K
         self.c = connections
-        
-                
+
+
 class Solution(AbstractSolution):
     #### IMPLEMENTAR FUNCIONES NECESARIAS AQUI
 
@@ -95,7 +95,7 @@ class Solution(AbstractSolution):
         f = open(fname)
         self.V, self.E, self.R, self.C, self.X = map(int, f.readline().split())
         self.v_size = list(map(int, f.readline().split()))
-        self.endpoints = []
+        self.ep = []
 
         # Read the endpoints
         for i in range(0, self.E):
@@ -104,16 +104,31 @@ class Solution(AbstractSolution):
             for j in range(0, K):
                 c, Lc = map(int, f.readline().split())
                 connections[c] = Lc
-            self.endpoints.append(EndPoint(L, K, connections))
+            self.ep.append(EndPoint(L, K, connections))
 
         self.re = []
-        for i in range(0, R):
+        for i in range(0, self.R):
             Rv, Re, Rn = map(int, f.readline().split())
-            re.append((Rv, Re, Rn))
-            
-    # def writeSolution(self, fname):
+            self.re.append((Rv, Re, Rn))
 
-    # def initialSolution(self):
+    def writeSolution(self, fname):
+        f = open(fname, 'w')
+        f.write(str(sum(1 for v in self.solution if v))+'\n')
+        for i,v in enumerate(self.solution):
+            if v:
+                f.write(str(i)+' '+' '.join(map(str, v))+'\n')
+
+    def validSolution(self):
+        for v in self.solution:
+            if sum(self.v_size[i] for i in v) > self.X:
+                return False
+        return True
+
+    def initialSolution(self):
+        # Empty solution
+        self.solution = []
+        for _ in range(self.C):
+            self.solution.append(set())
 
     # def iterateSolution(self):
 
