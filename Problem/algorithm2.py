@@ -1,4 +1,4 @@
-import time
+from time import time
 import os
 
 #### NOTA: ASEGURARSE DE QUE EXISTA EL DIRECTORIO solutions
@@ -41,7 +41,7 @@ class AbstractSolution:
         or can be implemented for the particular problem.
         """
         self.initialSolution()
-        self.saveSolution(0)
+        self.saveSolution()
         self.max_score = max(0,self.scoreSolution())
         while not self.stopSolution():
             self.iterateSolution()
@@ -66,7 +66,10 @@ class AbstractSolution:
     def solveProblem(self, fname):
         """ Solve the problem for a .in file. """
         self.readInput(fname)
+        t0 = time()
         self.findSolution()
+        t1 = time()
+        print("Time: ", t1-t0)
         self.saveSolution()
 
     #### LLAMAR A ESTA PARA RESOLVER TODOS LOS FICHEROS .in
@@ -118,10 +121,10 @@ class Solution(AbstractSolution):
 
 
     def writeSolution(self, fname):
-        if not validSolution():
+        if not self.validSolution():
             print("The obtained solution is not valid...")
 
-        print("The solution has objective value", scoreSolution())    
+        print("The solution has objective value", self.scoreSolution())    
         f = open(fname, 'w')
         f.write(str(sum(1 for v in self.solution if v))+'\n')
         for i,v in enumerate(self.solution):
